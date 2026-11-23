@@ -1,0 +1,12 @@
+# Binaires et artefacts de build
+*.exe
+*.test
+*.out
+
+# Couverture
+coverage.out
+coverage.html
+
+# Outils et caches locaux
+.tools/
+.DS_Store
