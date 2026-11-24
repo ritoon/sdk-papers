@@ -55,3 +55,4 @@ accéder au contrat complet.
 | `SearchBeneficiaries` | `GET /recherche-beneficiaires` |
 | `SearchDocuments` | `GET /recherche-documents` |
 | `SearchPublications` | `GET /recherche-publications` |
+| `SuggestionsWithOptions` | `GET /suggestions` |

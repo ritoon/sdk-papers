@@ -47,6 +47,8 @@ def typename(s, hint, defs):
         fields = []
         for k, v in s['properties'].items():
             t = typename(v, n + name(k), defs)
+            if public == 'SuggestionsWithOptions' and k == 'entreprise_cessee':
+                t = 'Boolean01'
             if not t.startswith(('[]', 'map[')):
                 t = '*' + t
             fields.append(f'\t{name(k)} {t} `json:"{k},omitempty"`')

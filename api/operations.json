@@ -33,5 +33,10 @@
     "GET",
     "/recherche-publications",
     "SearchPublications"
+  ],
+  [
+    "GET",
+    "/suggestions",
+    "SuggestionsWithOptions"
   ]
 ]
