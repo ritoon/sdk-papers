@@ -1,6 +1,6 @@
 # sdk-papers
 
-Client Go en lecture seule pour l’[API Pappers](https://www.pappers.fr/api),
+Client Go pour l’[API Pappers](https://www.pappers.fr/api),
 le registre des entreprises françaises : autocomplétion, fiche entreprise et
 suivi des crédits.
 
@@ -111,8 +111,9 @@ Une annulation ou un dépassement de délai remonte `context.Canceled` ou
   `https://api.pappers.fr/v2` avec le transport par défaut. Le SDK ne le place
   jamais dans une URL ni dans les erreurs qu’il renvoie. Un `Doer` ou un transport
   personnalisé a accès au jeton et reste responsable de son utilisation.
-- Lecture seule : aucune création ni modification côté Pappers, aucun
-  enrichissement payant ni vérification VIES demandés.
+- Les méthodes historiques restent en lecture seule. Les nouvelles opérations
+  exposent explicitement les options du contrat ; les options payantes ne sont
+  jamais activées automatiquement.
 - Redirections refusées, aucune tentative rejouée automatiquement.
 - Délai maximum de 25 secondes par appel, réponse limitée à 4 Mio.
 - Les réponses sont contrôlées avant d’être rendues : une fiche dont le SIREN
@@ -200,3 +201,10 @@ contrat v2.
 ## Licence
 
 [MIT](LICENSE).
+
+## Couverture étendue Pappers 2.20.0
+
+Les opérations supplémentaires sont décrites dans [api/README.md](api/README.md).
+Les méthodes historiques `Company`, `Suggestions`, `Usage` et `Ping` restent
+compatibles. `CompanyDetails` expose la fiche complète et ses options, y compris
+les statuts RCS/RNE, les dates de radiation et les procédures collectives.

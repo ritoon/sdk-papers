@@ -33,6 +33,12 @@ jobs:
             exit 1
           fi
 
+      - name: Contrat généré reproductible
+        run: |
+          python3 scripts/generate-api.py
+          gofmt -w api_*.go
+          git diff --exit-code -- 'api_*.go'
+
       - name: Vet
         run: go vet ./...
 

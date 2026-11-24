@@ -1,9 +1,9 @@
-// Package papers fournit un client Go en lecture seule pour l'API Pappers, le
+// Package papers fournit un client Go pour l'API Pappers, le
 // registre des entreprises françaises : autocomplétion, fiche entreprise et
 // suivi des crédits.
 //
-// Le client n'expose que des lectures : aucune création ni modification côté
-// Pappers. Le jeton est transmis dans l'en-tête api-key, uniquement vers
+// Les méthodes historiques restent en lecture seule. Les opérations étendues
+// exposent explicitement les options du contrat. Le jeton est transmis dans l'en-tête api-key, uniquement vers
 // https://api.pappers.fr/v2 avec le transport par défaut, et n'apparaît jamais
 // dans une URL ni dans une erreur renvoyée par le SDK. Un Doer ou un transport
 // personnalisé a accès au jeton et reste responsable de son utilisation.
@@ -12,6 +12,7 @@
 package papers
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -169,8 +170,19 @@ func (c *Client) Ping(ctx context.Context) error {
 }
 
 func (c *Client) get(parent context.Context, path string, query url.Values, result any) error {
+	data, _, _, err := c.request(parent, http.MethodGet, path, query, nil, false, []int{http.StatusOK})
+	if err != nil {
+		return err
+	}
+	if json.Unmarshal(data, result) != nil {
+		return errors.New("réponse Papers JSON invalide")
+	}
+	return nil
+}
+
+func (c *Client) request(parent context.Context, method, path string, query url.Values, payload []byte, binary bool, statuses []int) ([]byte, int, http.Header, error) {
 	if c.token == "" {
-		return errors.New("Papers non configuré")
+		return nil, 0, nil, errors.New("Papers non configuré")
 	}
 	ctx, cancel := context.WithTimeout(parent, 25*time.Second)
 	defer cancel()
@@ -178,39 +190,49 @@ func (c *Client) get(parent context.Context, path string, query url.Values, resu
 	if len(query) > 0 {
 		u += "?" + query.Encode()
 	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u, nil)
+	req, err := http.NewRequestWithContext(ctx, method, u, bytes.NewReader(payload))
 	if err != nil {
-		return errors.New("requête Papers invalide")
+		return nil, 0, nil, errors.New("requête Papers invalide")
 	}
 	req.Header.Set("api-key", c.token)
 	req.Header.Set("Accept", "application/json")
+	if binary {
+		req.Header.Set("Accept", "application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/octet-stream")
+	}
+	if payload != nil {
+		req.Header.Set("Content-Type", "application/json")
+	}
 	res, err := c.doer(c.http, req)
 	if err != nil {
 		if ctx.Err() != nil {
-			return ctx.Err()
+			return nil, 0, nil, ctx.Err()
 		}
 		var networkErr net.Error
 		if errors.Is(err, context.DeadlineExceeded) || (errors.As(err, &networkErr) && networkErr.Timeout()) {
-			return context.DeadlineExceeded
+			return nil, 0, nil, context.DeadlineExceeded
 		}
-		return errors.New("connexion Papers impossible")
+		return nil, 0, nil, errors.New("connexion Papers impossible")
 	}
 	defer res.Body.Close()
-	if res.StatusCode != http.StatusOK {
-		return &APIError{StatusCode: res.StatusCode}
+	accepted := false
+	for _, status := range statuses {
+		if res.StatusCode == status {
+			accepted = true
+			break
+		}
+	}
+	if !accepted {
+		return nil, 0, nil, &APIError{StatusCode: res.StatusCode}
 	}
 	data, err := io.ReadAll(io.LimitReader(res.Body, maxResponse+1))
 	if err != nil {
 		if ctx.Err() != nil {
-			return ctx.Err()
+			return nil, 0, nil, ctx.Err()
 		}
-		return errors.New("réponse Papers illisible")
+		return nil, 0, nil, errors.New("réponse Papers illisible")
 	}
 	if len(data) > maxResponse {
-		return errors.New("réponse Papers trop volumineuse")
+		return nil, 0, nil, errors.New("réponse Papers trop volumineuse")
 	}
-	if json.Unmarshal(data, result) != nil {
-		return errors.New("réponse Papers JSON invalide")
-	}
-	return nil
+	return data, res.StatusCode, res.Header.Clone(), nil
 }
