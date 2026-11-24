@@ -59,3 +59,4 @@ accéder au contrat complet.
 | `AnnualAccounts` | `GET /entreprise/comptes` |
 | `CompanyNetwork` | `GET /entreprise/cartographie` |
 | `DownloadDocument` | `GET /document/telechargement` |
+| `DownloadPappersExtract` | `GET /document/extrait_pappers` |

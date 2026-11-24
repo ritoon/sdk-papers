@@ -53,5 +53,10 @@
     "GET",
     "/document/telechargement",
     "DownloadDocument"
+  ],
+  [
+    "GET",
+    "/document/extrait_pappers",
+    "DownloadPappersExtract"
   ]
 ]
