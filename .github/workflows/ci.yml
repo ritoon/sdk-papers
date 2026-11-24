@@ -34,3 +34,21 @@ jobs:
 
       - name: Tests
         run: go test -race -count=1 ./...
+
+  secrets:
+    name: Secrets (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Installer Gitleaks (version figée)
+        run: go install github.com/zricethezav/gitleaks/v8@v8.24.3
+
+      - name: Analyser tout l’historique accessible
+        run: gitleaks git --redact=100 --log-opts="--all" .

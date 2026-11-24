@@ -10,3 +10,8 @@ coverage.html
 # Outils et caches locaux
 .tools/
 .DS_Store
+
+# Secrets locaux (seul le modèle synthétique peut être suivi)
+.env
+.env.*
+!.env.example
