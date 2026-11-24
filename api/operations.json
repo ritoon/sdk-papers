@@ -58,5 +58,10 @@
     "GET",
     "/document/extrait_pappers",
     "DownloadPappersExtract"
+  ],
+  [
+    "GET",
+    "/document/extrait_inpi",
+    "DownloadINPIExtract"
   ]
 ]
