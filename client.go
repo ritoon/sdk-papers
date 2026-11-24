@@ -6,8 +6,9 @@
 // Pappers. Le jeton est transmis dans l'en-tête api-key, uniquement vers
 // https://api.pappers.fr/v2 avec le transport par défaut, et n'apparaît jamais
 // dans une URL ni dans une erreur renvoyée par le SDK. Un Doer ou un transport
-// personnalisé a accès au jeton et reste responsable de son utilisation. Les redirections sont refusées, aucune tentative n'est rejouée, et la
-// réponse est bornée en taille comme en durée.
+// personnalisé a accès au jeton et reste responsable de son utilisation.
+// Les redirections sont refusées, aucune tentative n'est rejouée, et la réponse
+// est bornée en taille comme en durée.
 package papers
 
 import (
