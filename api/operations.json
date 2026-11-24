@@ -63,5 +63,10 @@
     "GET",
     "/document/extrait_inpi",
     "DownloadINPIExtract"
+  ],
+  [
+    "GET",
+    "/document/avis_situation_insee",
+    "DownloadINSEENotice"
   ]
 ]
