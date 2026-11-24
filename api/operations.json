@@ -1,1 +1,12 @@
-[["GET", "/entreprise", "CompanyDetails"]]
+[
+  [
+    "GET",
+    "/entreprise",
+    "CompanyDetails"
+  ],
+  [
+    "GET",
+    "/association",
+    "AssociationDetails"
+  ]
+]

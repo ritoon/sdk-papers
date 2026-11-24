@@ -49,3 +49,4 @@ accéder au contrat complet.
 | Méthode | Route / événement |
 |---|---|
 | `CompanyDetails` | `GET /entreprise` |
+| `AssociationDetails` | `GET /association` |
