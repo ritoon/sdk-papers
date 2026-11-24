@@ -18,5 +18,10 @@
     "GET",
     "/recherche-dirigeants",
     "SearchOfficers"
+  ],
+  [
+    "GET",
+    "/recherche-beneficiaires",
+    "SearchBeneficiaries"
   ]
 ]
