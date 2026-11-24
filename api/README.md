@@ -53,3 +53,4 @@ accéder au contrat complet.
 | `SearchCompanies` | `GET /recherche` |
 | `SearchOfficers` | `GET /recherche-dirigeants` |
 | `SearchBeneficiaries` | `GET /recherche-beneficiaires` |
+| `SearchDocuments` | `GET /recherche-documents` |

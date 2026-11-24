@@ -23,5 +23,10 @@
     "GET",
     "/recherche-beneficiaires",
     "SearchBeneficiaries"
+  ],
+  [
+    "GET",
+    "/recherche-documents",
+    "SearchDocuments"
   ]
 ]
