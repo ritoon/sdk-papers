@@ -67,3 +67,4 @@ accéder au contrat complet.
 | `DownloadFinancialReport` | `GET /document/rapport_financier` |
 | `DownloadNonFinancialReport` | `GET /document/rapport_non_financier` |
 | `CheckPersonCompliance` | `GET /conformite/personne_physique` |
+| `WatchCompanies` | `POST /liste` |

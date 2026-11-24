@@ -93,5 +93,10 @@
     "GET",
     "/conformite/personne_physique",
     "CheckPersonCompliance"
+  ],
+  [
+    "POST",
+    "/liste",
+    "WatchCompanies"
   ]
 ]
