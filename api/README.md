@@ -71,3 +71,4 @@ accéder au contrat complet.
 | `WatchOfficers` | `POST /liste/` |
 | `DeleteNotifications` | `DELETE /liste/` |
 | `AddNotificationInformation` | `POST /liste-informations` |
+| `DecodeCompanyWebhook` | `WEBHOOK webhook_entreprise` |

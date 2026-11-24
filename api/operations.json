@@ -113,5 +113,10 @@
     "POST",
     "/liste-informations",
     "AddNotificationInformation"
+  ],
+  [
+    "WEBHOOK",
+    "webhook_entreprise",
+    "CompanyWebhook"
   ]
 ]
