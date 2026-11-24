@@ -13,5 +13,10 @@
     "GET",
     "/recherche",
     "SearchCompanies"
+  ],
+  [
+    "GET",
+    "/recherche-dirigeants",
+    "SearchOfficers"
   ]
 ]

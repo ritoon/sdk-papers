@@ -51,3 +51,4 @@ accéder au contrat complet.
 | `CompanyDetails` | `GET /entreprise` |
 | `AssociationDetails` | `GET /association` |
 | `SearchCompanies` | `GET /recherche` |
+| `SearchOfficers` | `GET /recherche-dirigeants` |
