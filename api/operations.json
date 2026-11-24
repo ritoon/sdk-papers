@@ -123,5 +123,10 @@
     "WEBHOOK",
     "webhook_dirigeant",
     "OfficerWebhook"
+  ],
+  [
+    "WEBHOOK",
+    "veille_evenement",
+    "MonitoringWebhook"
   ]
 ]

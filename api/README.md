@@ -73,3 +73,53 @@ accéder au contrat complet.
 | `AddNotificationInformation` | `POST /liste-informations` |
 | `DecodeCompanyWebhook` | `WEBHOOK webhook_entreprise` |
 | `DecodeOfficerWebhook` | `WEBHOOK webhook_dirigeant` |
+| `DecodeMonitoringWebhook` | `WEBHOOK veille_evenement` |
+
+## Recherche et pagination
+
+```go
+result, err := client.SearchCompanies(ctx, papers.SearchCompaniesParams{
+    Q: papers.Pointer("entreprise fictive"),
+    StatutRcs: papers.Pointer("Radié"),
+    ParPage: papers.Pointer(int64(10)),
+    Page: papers.Pointer(int64(1)),
+})
+// result.Body.Resultats, result.Body.Total et result.Body.Page sont accessibles.
+// Pour la pagination par curseur, transmettre Curseur puis lire CurseurSuivant.
+```
+
+`SuggestionsWithOptions` donne accès aux six cibles, n'impose pas la limite de
+2–200 caractères de la méthode historique et accepte les indicateurs de
+cessation `0`/`1` ou booléens (`Boolean01`). Une clé API reste requise, conformément
+à la sécurité héritée du contrat OpenAPI, même si le service peut permettre des
+suggestions publiques. Les cibles multiples sont séparées par des virgules.
+
+## Documents et surveillance
+
+Les méthodes `Download…` retournent `Response[[]byte]` : utiliser `Body` pour le
+contenu PDF/XLSX et les en-têtes pour le type de contenu et le nom du fichier.
+Un document de plus de 4 Mio est rejeté par la limite de transport du SDK.
+
+`WatchCompanies`, `WatchOfficers`, `DeleteNotifications` et
+`AddNotificationInformation` modifient les listes Pappers lorsqu'on les appelle.
+Les ajouts acceptent 200 et 201, les informations acceptent un 200 vide ; les
+routes `/liste` et `/liste/` restent distinctes. Aucun de ces appels n'est
+exécuté lors de la construction du client ou par les tests.
+
+Le contrat des dirigeants marque `siren` obligatoire tout en décrivant les
+personnes physiques avec nom, prénom et date de naissance. Le DTO conserve les
+deux formes sans inventer une restriction locale : la validation métier reste
+au fournisseur. Cet écart documentaire demande une recette sur compte réel.
+
+## Webhooks entrants
+
+Les fonctions `DecodeCompanyWebhook`, `DecodeOfficerWebhook` et
+`DecodeMonitoringWebhook` décodent le corps fourni par votre serveur HTTP. Elles
+vérifient le type d'événement, la présence de `donnees`, le JSON et la limite de
+4 Mio ; elles ne déploient pas de serveur et n'authentifient pas l'émetteur.
+L'application doit limiter le corps HTTP avant de le lire (par exemple avec
+`http.MaxBytesReader`), vérifier son origine selon sa configuration et gérer les
+doublons. Aucune signature non documentée n'est supposée.
+
+Les événements et leurs notifications sont typés. Les champs supplémentaires
+restent accessibles dans le corps d'entrée, conservé par l'application.
