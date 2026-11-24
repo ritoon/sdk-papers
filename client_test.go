@@ -266,3 +266,105 @@ func TestWithDoerReceivesAuthenticatedRequestWithoutTokenInURL(t *testing.T) {
 	})}), WithDoer(nil))
 	require.NoError(t, c.Ping(context.Background()))
 }
+
+func TestReadOperationsPropagateAPIErrors(t *testing.T) {
+	c := New("private-token", WithDoer(func(_ *http.Client, _ *http.Request) (*http.Response, error) {
+		return response(http.StatusUnauthorized, `{"error":"private-token"}`), nil
+	}))
+	_, err := c.Suggestions(context.Background(), "test", 10)
+	var apiErr *APIError
+	require.ErrorAs(t, err, &apiErr)
+	require.Equal(t, http.StatusUnauthorized, apiErr.StatusCode)
+	_, err = c.Company(context.Background(), "001234567")
+	require.ErrorAs(t, err, &apiErr)
+	require.Equal(t, http.StatusUnauthorized, apiErr.StatusCode)
+}
+
+func TestCompanyRejectsInconsistentEstablishment(t *testing.T) {
+	for _, body := range []string{
+		`{"siren":"001234567"}`,
+		`{"siren":"001234567","etablissement":{"siret":"00123456799999"}}`,
+	} {
+		t.Run(body, func(t *testing.T) {
+			c := New("token", WithDoer(func(_ *http.Client, _ *http.Request) (*http.Response, error) {
+				return response(200, body), nil
+			}))
+			company, err := c.Company(context.Background(), "00123456700012")
+			require.Nil(t, company)
+			require.EqualError(t, err, "réponse Papers incohérente avec le SIRET demandé")
+		})
+	}
+}
+
+type timeoutError struct{}
+
+func (timeoutError) Error() string   { return "private-token" }
+func (timeoutError) Timeout() bool   { return true }
+func (timeoutError) Temporary() bool { return true }
+
+func TestTransportTimeoutsAreNormalized(t *testing.T) {
+	for _, transportErr := range []error{context.DeadlineExceeded, timeoutError{}} {
+		c := New("private-token", WithDoer(func(_ *http.Client, req *http.Request) (*http.Response, error) {
+			require.NoError(t, req.Context().Err())
+			return nil, transportErr
+		}))
+		require.ErrorIs(t, c.Ping(context.Background()), context.DeadlineExceeded)
+	}
+}
+
+type failingBody struct {
+	read   func() error
+	closed bool
+}
+
+func (b *failingBody) Read([]byte) (int, error) { return 0, b.read() }
+func (b *failingBody) Close() error             { b.closed = true; return nil }
+
+func TestResponseReadFailures(t *testing.T) {
+	for _, canceled := range []bool{false, true} {
+		t.Run(map[bool]string{false: "read error", true: "cancellation while reading"}[canceled], func(t *testing.T) {
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+			body := &failingBody{read: func() error {
+				if canceled {
+					cancel()
+				}
+				return errors.New("private-token")
+			}}
+			c := New("private-token", WithDoer(func(_ *http.Client, _ *http.Request) (*http.Response, error) {
+				return &http.Response{StatusCode: 200, Body: body}, nil
+			}))
+			err := c.Ping(ctx)
+			if canceled {
+				require.ErrorIs(t, err, context.Canceled)
+			} else {
+				require.EqualError(t, err, "réponse Papers illisible")
+			}
+			require.NotContains(t, err.Error(), "private-token")
+			require.True(t, body.closed, "le corps doit être fermé même en cas d’erreur")
+		})
+	}
+}
+
+func TestCompanyDecodingRejectsWrongFieldTypes(t *testing.T) {
+	for _, body := range []string{`{"siren":123}`, `{"diffusable":"oui"}`, `{"siege":[]}`} {
+		var company Company
+		require.Error(t, json.Unmarshal([]byte(body), &company))
+	}
+}
+
+func TestValidationBoundaries(t *testing.T) {
+	for _, length := range []int{2, 200} {
+		require.True(t, ValidQuery(strings.Repeat("é", length)))
+	}
+	require.False(t, ValidQuery(string([]byte{'a', 0xff})))
+	require.False(t, ValidQuery("ab\x7f"))
+	c := New("token", WithHTTPClient(nil), WithDoer(func(_ *http.Client, _ *http.Request) (*http.Response, error) {
+		return response(200, `{"resultats_nom_entreprise":[],"resultats_siren":[],"resultats_siret":[]}`), nil
+	}))
+	for _, limit := range []int{1, 100} {
+		result, err := c.Suggestions(context.Background(), "ab", limit)
+		require.NoError(t, err)
+		require.Empty(t, result.Names)
+	}
+}
