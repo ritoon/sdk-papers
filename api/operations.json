@@ -68,5 +68,10 @@
     "GET",
     "/document/avis_situation_insee",
     "DownloadINSEENotice"
+  ],
+  [
+    "GET",
+    "/document/statuts",
+    "DownloadArticles"
   ]
 ]

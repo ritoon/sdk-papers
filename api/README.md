@@ -62,3 +62,4 @@ accéder au contrat complet.
 | `DownloadPappersExtract` | `GET /document/extrait_pappers` |
 | `DownloadINPIExtract` | `GET /document/extrait_inpi` |
 | `DownloadINSEENotice` | `GET /document/avis_situation_insee` |
+| `DownloadArticles` | `GET /document/statuts` |
