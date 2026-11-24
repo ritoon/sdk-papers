@@ -28,5 +28,10 @@
     "GET",
     "/recherche-documents",
     "SearchDocuments"
+  ],
+  [
+    "GET",
+    "/recherche-publications",
+    "SearchPublications"
   ]
 ]
