@@ -142,6 +142,20 @@ noms JSON de Pappers. Points à connaître :
 go test ./...
 ```
 
+La CI vérifie le formatage, `go vet` et les tests avec le détecteur de courses
+concurrentes, sur Go 1.24 et la version stable. Elle échoue si la couverture
+globale des instructions descend sous **99 %**, et conserve le profil de
+couverture comme artefact. Pour reproduire ce contrôle localement :
+
+```bash
+go test -race -count=1 -covermode=atomic -coverpkg=./... -coverprofile=/tmp/sdk-papers-coverage.out ./...
+sh scripts/check-coverage.sh /tmp/sdk-papers-coverage.out
+go tool cover -func=/tmp/sdk-papers-coverage.out
+```
+
+Ce seuil mesure les instructions exécutées, pas toutes les combinaisons de
+branches ni la compatibilité avec le service réel.
+
 Les tests n’appellent pas Pappers : les transports sont simulés et les corps de
 réponse sont synthétiques. Sont couverts l’authentification, l’encodage des
 paramètres, les champs absents, le décodage `0`/`1`, les champs hors
