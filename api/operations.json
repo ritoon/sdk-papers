@@ -88,5 +88,10 @@
     "GET",
     "/document/rapport_non_financier",
     "DownloadNonFinancialReport"
+  ],
+  [
+    "GET",
+    "/conformite/personne_physique",
+    "CheckPersonCompliance"
   ]
 ]

@@ -66,3 +66,4 @@ accéder au contrat complet.
 | `DownloadBeneficiaryDeclaration` | `GET /document/declaration_beneficiaires_effectifs` |
 | `DownloadFinancialReport` | `GET /document/rapport_financier` |
 | `DownloadNonFinancialReport` | `GET /document/rapport_non_financier` |
+| `CheckPersonCompliance` | `GET /conformite/personne_physique` |
