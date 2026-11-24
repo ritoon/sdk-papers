@@ -57,3 +57,4 @@ accéder au contrat complet.
 | `SearchPublications` | `GET /recherche-publications` |
 | `SuggestionsWithOptions` | `GET /suggestions` |
 | `AnnualAccounts` | `GET /entreprise/comptes` |
+| `CompanyNetwork` | `GET /entreprise/cartographie` |

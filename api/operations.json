@@ -43,5 +43,10 @@
     "GET",
     "/entreprise/comptes",
     "AnnualAccounts"
+  ],
+  [
+    "GET",
+    "/entreprise/cartographie",
+    "CompanyNetwork"
   ]
 ]
