@@ -73,5 +73,10 @@
     "GET",
     "/document/statuts",
     "DownloadArticles"
+  ],
+  [
+    "GET",
+    "/document/declaration_beneficiaires_effectifs",
+    "DownloadBeneficiaryDeclaration"
   ]
 ]

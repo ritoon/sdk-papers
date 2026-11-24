@@ -63,3 +63,4 @@ accéder au contrat complet.
 | `DownloadINPIExtract` | `GET /document/extrait_inpi` |
 | `DownloadINSEENotice` | `GET /document/avis_situation_insee` |
 | `DownloadArticles` | `GET /document/statuts` |
+| `DownloadBeneficiaryDeclaration` | `GET /document/declaration_beneficiaires_effectifs` |
