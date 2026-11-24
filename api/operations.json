@@ -48,5 +48,10 @@
     "GET",
     "/entreprise/cartographie",
     "CompanyNetwork"
+  ],
+  [
+    "GET",
+    "/document/telechargement",
+    "DownloadDocument"
   ]
 ]

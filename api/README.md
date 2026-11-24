@@ -58,3 +58,4 @@ accéder au contrat complet.
 | `SuggestionsWithOptions` | `GET /suggestions` |
 | `AnnualAccounts` | `GET /entreprise/comptes` |
 | `CompanyNetwork` | `GET /entreprise/cartographie` |
+| `DownloadDocument` | `GET /document/telechargement` |
