@@ -78,5 +78,10 @@
     "GET",
     "/document/declaration_beneficiaires_effectifs",
     "DownloadBeneficiaryDeclaration"
+  ],
+  [
+    "GET",
+    "/document/rapport_financier",
+    "DownloadFinancialReport"
   ]
 ]
