@@ -8,5 +8,10 @@
     "GET",
     "/association",
     "AssociationDetails"
+  ],
+  [
+    "GET",
+    "/recherche",
+    "SearchCompanies"
   ]
 ]
