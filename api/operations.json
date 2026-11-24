@@ -103,5 +103,10 @@
     "POST",
     "/liste/",
     "WatchOfficers"
+  ],
+  [
+    "DELETE",
+    "/liste/",
+    "DeleteNotifications"
   ]
 ]

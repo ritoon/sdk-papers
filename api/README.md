@@ -69,3 +69,4 @@ accéder au contrat complet.
 | `CheckPersonCompliance` | `GET /conformite/personne_physique` |
 | `WatchCompanies` | `POST /liste` |
 | `WatchOfficers` | `POST /liste/` |
+| `DeleteNotifications` | `DELETE /liste/` |
