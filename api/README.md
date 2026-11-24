@@ -72,3 +72,4 @@ accéder au contrat complet.
 | `DeleteNotifications` | `DELETE /liste/` |
 | `AddNotificationInformation` | `POST /liste-informations` |
 | `DecodeCompanyWebhook` | `WEBHOOK webhook_entreprise` |
+| `DecodeOfficerWebhook` | `WEBHOOK webhook_dirigeant` |

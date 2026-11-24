@@ -118,5 +118,10 @@
     "WEBHOOK",
     "webhook_entreprise",
     "CompanyWebhook"
+  ],
+  [
+    "WEBHOOK",
+    "webhook_dirigeant",
+    "OfficerWebhook"
   ]
 ]
