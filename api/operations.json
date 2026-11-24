@@ -83,5 +83,10 @@
     "GET",
     "/document/rapport_financier",
     "DownloadFinancialReport"
+  ],
+  [
+    "GET",
+    "/document/rapport_non_financier",
+    "DownloadNonFinancialReport"
   ]
 ]

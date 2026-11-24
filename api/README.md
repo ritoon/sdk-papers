@@ -65,3 +65,4 @@ accéder au contrat complet.
 | `DownloadArticles` | `GET /document/statuts` |
 | `DownloadBeneficiaryDeclaration` | `GET /document/declaration_beneficiaires_effectifs` |
 | `DownloadFinancialReport` | `GET /document/rapport_financier` |
+| `DownloadNonFinancialReport` | `GET /document/rapport_non_financier` |
