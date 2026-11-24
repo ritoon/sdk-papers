@@ -142,6 +142,36 @@ paramètres, les champs absents, le décodage `0`/`1`, les champs hors
 projection, les crédits à zéro, les délais, l’annulation, les redirections, les
 codes d’erreur, les limites de taille et le non-divulgation du jeton.
 
+## Prévention des secrets et données réelles
+
+Les exemples et fixtures doivent rester synthétiques : ne pas copier de réponses
+Pappers réelles, de données clients ou de jetons valides dans le dépôt.
+Les fichiers `.env` et `.env.*` sont ignorés ; seul `.env.example` peut être suivi
+et doit contenir uniquement des valeurs factices. Une exclusion Git ne protège
+pas un fichier déjà suivi.
+
+La CI recherche les secrets dans tout l’historique accessible avec
+[Gitleaks v8.24.3](https://github.com/gitleaks/gitleaks/releases/tag/v8.24.3).
+Pour lancer le même contrôle localement depuis la racine du dépôt :
+
+```bash
+go install github.com/zricethezav/gitleaks/v8@v8.24.3
+"$(go env GOPATH)/bin/gitleaks" git --redact=100 --log-opts="--all" .
+```
+
+Le clone doit contenir l’historique à contrôler (`git fetch --unshallow` pour un
+clone superficiel). Pour examiner également les fichiers avant commit :
+
+```bash
+"$(go env GOPATH)/bin/gitleaks" dir --redact=100 .
+```
+
+Une détection fait échouer le contrôle ; les valeurs sont masquées dans la sortie.
+Aucune exclusion globale des tests n’est appliquée. Tout faux positif doit faire
+l’objet d’une exception précise, justifiée en revue. Ce scan ne garantit ni
+l’absence de toutes les clés API ni la détection des données personnelles ou
+métier : la revue des exemples reste nécessaire.
+
 ## Référence
 
 [Documentation de l’API Pappers](https://www.pappers.fr/api/documentation) —
