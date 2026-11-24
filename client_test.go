@@ -240,7 +240,7 @@ func TestCancellationAndNetworkErrors(t *testing.T) {
 	require.NotContains(t, err.Error(), "private-token")
 }
 
-func TestWithDoerObservesRequestWithoutTokenLeak(t *testing.T) {
+func TestWithDoerReceivesAuthenticatedRequestWithoutTokenInURL(t *testing.T) {
 	seen := 0
 	var observed *http.Request
 	doer := func(httpClient *http.Client, req *http.Request) (*http.Response, error) {
@@ -257,6 +257,7 @@ func TestWithDoerObservesRequestWithoutTokenLeak(t *testing.T) {
 	require.NoError(t, c.Ping(context.Background()))
 	require.Equal(t, 1, seen)
 	require.Equal(t, "/v2/suivi-jetons", observed.URL.Path)
+	require.Equal(t, "private-token", observed.Header.Get("api-key"))
 	require.NotContains(t, observed.URL.String(), "private-token")
 
 	// Un Doer nil laisse le comportement par défaut en place.
