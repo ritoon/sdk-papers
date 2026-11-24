@@ -70,3 +70,4 @@ accéder au contrat complet.
 | `WatchCompanies` | `POST /liste` |
 | `WatchOfficers` | `POST /liste/` |
 | `DeleteNotifications` | `DELETE /liste/` |
+| `AddNotificationInformation` | `POST /liste-informations` |
