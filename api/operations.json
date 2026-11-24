@@ -38,5 +38,10 @@
     "GET",
     "/suggestions",
     "SuggestionsWithOptions"
+  ],
+  [
+    "GET",
+    "/entreprise/comptes",
+    "AnnualAccounts"
   ]
 ]
