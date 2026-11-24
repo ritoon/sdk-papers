@@ -98,5 +98,10 @@
     "POST",
     "/liste",
     "WatchCompanies"
+  ],
+  [
+    "POST",
+    "/liste/",
+    "WatchOfficers"
   ]
 ]

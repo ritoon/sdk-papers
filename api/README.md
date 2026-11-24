@@ -68,3 +68,4 @@ accéder au contrat complet.
 | `DownloadNonFinancialReport` | `GET /document/rapport_non_financier` |
 | `CheckPersonCompliance` | `GET /conformite/personne_physique` |
 | `WatchCompanies` | `POST /liste` |
+| `WatchOfficers` | `POST /liste/` |
