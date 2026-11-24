@@ -4,8 +4,9 @@
 //
 // Le client n'expose que des lectures : aucune création ni modification côté
 // Pappers. Le jeton est transmis dans l'en-tête api-key, uniquement vers
-// https://api.pappers.fr/v2, et n'apparaît jamais dans une URL ni dans une
-// erreur. Les redirections sont refusées, aucune tentative n'est rejouée, et la
+// https://api.pappers.fr/v2 avec le transport par défaut, et n'apparaît jamais
+// dans une URL ni dans une erreur renvoyée par le SDK. Un Doer ou un transport
+// personnalisé a accès au jeton et reste responsable de son utilisation. Les redirections sont refusées, aucune tentative n'est rejouée, et la
 // réponse est bornée en taille comme en durée.
 package papers
 
@@ -37,8 +38,10 @@ type Client struct {
 
 // Doer exécute la requête préparée par le client. Le point d'extension permet
 // d'observer ou d'instrumenter les échanges (journalisation, capture de
-// diagnostic, métriques) sans donner accès au jeton : il reçoit la requête déjà
-// signée et doit la transmettre telle quelle.
+// diagnostic, métriques). Il reçoit la requête authentifiée, y compris le jeton
+// dans l’en-tête api-key, et doit la transmettre telle quelle. Ce callback est
+// du code de confiance : masquer api-key dans les journaux et éviter les captures
+// intégrales des requêtes/réponses contenant des données réelles.
 type Doer func(*http.Client, *http.Request) (*http.Response, error)
 
 func defaultDoer(httpClient *http.Client, req *http.Request) (*http.Response, error) {

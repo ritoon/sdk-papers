@@ -68,7 +68,11 @@ client := papers.New(token,
 
 `WithDoer` reçoit la requête déjà signée et doit la transmettre telle quelle.
 C’est le point d’extension pour la journalisation, la capture de diagnostic ou
-les métriques, sans donner accès au jeton :
+les métriques. Ce callback reçoit le jeton dans l’en-tête `api-key` : il doit
+être considéré comme du code de confiance, tout comme un transport personnalisé.
+Ne journalisez pas les en-têtes ni les requêtes/réponses complètes : masquez
+`api-key` et évitez de capturer des données réelles. L’exemple ci-dessous ne
+journalise que la méthode, le chemin sans paramètres et la durée :
 
 ```go
 func myDoer(httpClient *http.Client, req *http.Request) (*http.Response, error) {
@@ -104,7 +108,9 @@ Une annulation ou un dépassement de délai remonte `context.Canceled` ou
 ## Garanties
 
 - Le jeton est envoyé dans l’en-tête `api-key`, uniquement vers
-  `https://api.pappers.fr/v2`. Jamais dans une URL, jamais dans une erreur.
+  `https://api.pappers.fr/v2` avec le transport par défaut. Le SDK ne le place
+  jamais dans une URL ni dans les erreurs qu’il renvoie. Un `Doer` ou un transport
+  personnalisé a accès au jeton et reste responsable de son utilisation.
 - Lecture seule : aucune création ni modification côté Pappers, aucun
   enrichissement payant ni vérification VIES demandés.
 - Redirections refusées, aucune tentative rejouée automatiquement.
