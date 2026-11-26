@@ -18,6 +18,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log/slog"
 	"net"
 	"net/http"
 	"net/url"
@@ -37,6 +38,19 @@ type Client struct {
 	http  *http.Client
 	doer  Doer
 }
+
+// String masque les identifiants lors de la journalisation du client.
+// Le récepteur par valeur protège aussi les copies du client.
+func (Client) String() string { return "papers.Client{token:[REDACTED]}" }
+
+// Format masque les identifiants pour tous les verbes fmt, y compris %#v.
+// Aucun champ interne (transport personnalisé compris) n'est inspecté.
+func (c Client) Format(state fmt.State, _ rune) {
+	_, _ = io.WriteString(state, c.String())
+}
+
+// LogValue fournit une représentation sans identifiants aux handlers slog.
+func (c Client) LogValue() slog.Value { return slog.StringValue(c.String()) }
 
 // Doer exécute la requête préparée par le client. Le point d'extension permet
 // d'observer ou d'instrumenter les échanges (journalisation, capture de

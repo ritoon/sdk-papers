@@ -107,6 +107,12 @@ Une annulation ou un dépassement de délai remonte `context.Canceled` ou
 
 ## Garanties
 
+- La journalisation du `Client` (pointeur ou valeur) avec `fmt`, `log` et
+  `log/slog` masque intégralement la clé avec `[REDACTED]`, y compris avec
+  `%+v` et `%#v`. Aucun champ interne du client n'est affiché. Ce masquage
+  ne chiffre pas la clé en mémoire et ne protège pas les dumps par réflexion,
+  la chaîne fournie à `New`, ni les requêtes HTTP brutes : les transports et
+  `Doer` personnalisés doivent toujours masquer l'en-tête `api-key`.
 - Le jeton est envoyé dans l’en-tête `api-key`, uniquement vers
   `https://api.pappers.fr/v2` avec le transport par défaut. Le SDK ne le place
   jamais dans une URL ni dans les erreurs qu’il renvoie. Un `Doer` ou un transport
